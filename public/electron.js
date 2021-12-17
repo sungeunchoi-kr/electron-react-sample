@@ -1,17 +1,59 @@
+const Sentry = require("@sentry/electron");
+Sentry.init({ dsn: "YOUR_SENTRY_DSN" });
+
+function causeException() {
+    const a = null
+    a.b = true
+}
+
+function causeUnhandledRejection() {
+    function promise() {
+        return new Promise((resolve, _) => {
+            setTimeout(() => {
+                return resolve()
+            }, 1000)
+        })
+    }
+
+    promise().then(() => {
+        const a = undefined
+        a.b = true
+    })
+}
+
+function causeCrash() {
+    process.crash()
+}
+
+setTimeout(() => {
+    if (process.env.TEST_MAIN_EXCEPTION) {
+        causeException()
+    }
+    if (process.env.TEST_MAIN_UNHANDLED_REJECTION) {
+        causeUnhandledRejection()
+    }
+    if (process.env.TEST_CRASH) {
+        causeCrash()
+    }
+}, 3000)
+
+let win;
+
 const path = require('path');
 
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, dialog } = require('electron');
 const isDev = require('electron-is-dev');
 
 console.log('main: isDev=' + isDev)
 
 function createWindow() {
     // Create the browser window.
-    const win = new BrowserWindow({
+    win = new BrowserWindow({
         width: 800,
         height: 600,
         webPreferences: {
-            nodeIntegration: true,
+            nodeIntegration: false,
+            contextIsolation: true,
         },
     });
 

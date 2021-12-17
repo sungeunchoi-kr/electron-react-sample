@@ -13,7 +13,6 @@
     "electron": "wait-on tcp:3000 && electron .",
     "pack": "electron-builder -c.extraMetadata.main=build/electron.js"
   },
-
   "build": {
     "productName": "SampleElectronApp",
     "appId": "com.sampleelectronapp",
@@ -30,7 +29,6 @@
       "package.json"
     ]
   },
-
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -50,6 +48,8 @@
     ]
   },
   "dependencies": {
+    "@sentry/electron": "^2.5.4",
+    "@sentry/react": "^6.16.1",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
@@ -63,6 +63,7 @@
     "concurrently": "^6.4.0",
     "electron": "^16.0.4",
     "electron-builder": "^22.14.5",
+    "electron-download": "^4.1.1",
     "wait-on": "^6.0.0"
   }
 }
